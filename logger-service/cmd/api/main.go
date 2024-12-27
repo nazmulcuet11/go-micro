@@ -48,6 +48,8 @@ func main() {
 		Addr:    fmt.Sprintf(":%s", webPort),
 		Handler: app.routes(),
 	}
+
+	log.Println("Starting server")
 	err = srv.ListenAndServe()
 	if err != nil {
 		panic(err)
@@ -66,5 +68,7 @@ func connectToMongo() (*mongo.Client, error) {
 		log.Println("Error connecting to mongo")
 		return nil, err
 	}
+
+	log.Println("Connected to mongo db")
 	return conn, nil
 }
