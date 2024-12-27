@@ -25,7 +25,7 @@ type Models struct {
 }
 
 type LogEntry struct {
-	Id        string    `bson:"_id,ommitempty" json:"id,ommitempty"`
+	Id        string    `bson:"_id,omitempty" json:"id,omitempty"`
 	Name      string    `bson:"name" json:"name"`
 	Data      string    `bson:"data" json:"data"`
 	CreatedAt time.Time `bson:"created_at" json:"created_at"`
