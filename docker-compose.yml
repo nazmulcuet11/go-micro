@@ -12,7 +12,7 @@ services:
       mode: replicated
       replicas: 1
   
-  authentication-services:
+  authentication-service:
     build:
       context: ./authentication-service
       dockerfile: Dockerfile
