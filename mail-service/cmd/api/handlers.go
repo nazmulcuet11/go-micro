@@ -17,6 +17,7 @@ func (app *Config) SendMail(w http.ResponseWriter, r *http.Request) {
 	err := app.readJSON(w, r, &requestPayload)
 	if err != nil {
 		app.errorJSON(w, err)
+		return
 	}
 
 	msg := Message{
@@ -29,6 +30,7 @@ func (app *Config) SendMail(w http.ResponseWriter, r *http.Request) {
 	err = app.Mailer.SendSMTPMessage(&msg)
 	if err != nil {
 		app.errorJSON(w, err)
+		return
 	}
 
 	payload := jsonResponse{
