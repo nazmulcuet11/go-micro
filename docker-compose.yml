@@ -59,6 +59,17 @@ services:
       MAIL_ENCRYPTION: none
       MAIL_FROM_NAME: "Example.com"
       MAIL_FROM_ADDRESS: "mail@example.com"
+  
+  listner-service:
+    build:
+      context: ./listener-service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8084:80"
+    deploy:
+      mode: replicated
+      replicas: 1
 
   postgres:
     image: 'postgres:14.2'
