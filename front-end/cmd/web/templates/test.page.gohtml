@@ -113,7 +113,7 @@
         fetch("http:\/\/localhost:8080/handle", body)
             .then((response) => response.json())
             .then((data) => {
-                sent.innerHTML = "empty post request";
+                sent.innerHTML = JSON.stringify(payload, undefined, 4);
                 received.innerHTML = JSON.stringify(data, undefined, 4);
 
                 if (data.error) {
@@ -151,7 +151,7 @@
         fetch("http:\/\/localhost:8080/handle", body)
             .then((response) => response.json())
             .then((data) => {
-                sent.innerHTML = "empty post request";
+                sent.innerHTML = JSON.stringify(payload, undefined, 4);
                 received.innerHTML = JSON.stringify(data, undefined, 4);
 
                 if (data.error) {
