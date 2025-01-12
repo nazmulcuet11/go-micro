@@ -25,6 +25,12 @@
                 >Test Logger</a
             >
             <a
+                id="logGRPCBtn"
+                class="btn btn-outline-secondary"
+                href="javascript:void(0);"
+                >Test Log GRPC</a
+            >
+            <a
                 id="mailBrokerBtn"
                 class="btn btn-outline-secondary"
                 href="javascript:void(0);"
@@ -65,6 +71,7 @@
 <script>
     let brokerBtn = document.getElementById("brokerBtn");
     let logBrokerBtn = document.getElementById("logBrokerBtn");
+    let logGRPCBtn = document.getElementById("logGRPCBtn");
     let mailBrokerBtn = document.getElementById("mailBrokerBtn");
     let authBrokerBtn = document.getElementById("authBrokerBtn");
     let output = document.getElementById("output");
@@ -111,6 +118,41 @@
         };
 
         fetch("http:\/\/localhost:8080/handle", body)
+            .then((response) => response.json())
+            .then((data) => {
+                sent.innerHTML = JSON.stringify(payload, undefined, 4);
+                received.innerHTML = JSON.stringify(data, undefined, 4);
+
+                if (data.error) {
+                    console.log(data.message);
+                } else {
+                    output.innerHTML += `<br><strong>Response from broker service</strong>: ${data.message}`;
+                }
+            })
+            .catch((error) => {
+                output.innerHTML += `<br><br>Error: ${error.message}`;
+            });
+    });
+
+    logGRPCBtn.addEventListener("click", function () {
+        const payload = {
+            action: "log",
+            log: {
+                name: "event",
+                data: "some kind of data for grpc",
+            },
+        };
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        const body = {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: headers,
+        };
+
+        fetch("http:\/\/localhost:8080/log-grpc", body)
             .then((response) => response.json())
             .then((data) => {
                 sent.innerHTML = JSON.stringify(payload, undefined, 4);
