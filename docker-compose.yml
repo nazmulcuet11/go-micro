@@ -106,7 +106,7 @@ services:
       - ./db-data/mongo/:/data/db
   
   mailhog:
-    image: 'mailhog/mailhog:latest'
+    image: 'axllent/mailpit:latest'
     ports:
       - "1025:1025"
       - "8025:8025"
