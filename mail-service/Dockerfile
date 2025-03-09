@@ -2,7 +2,9 @@ FROM alpine:latest
 
 RUN mkdir app
 
-COPY ./build/mailApp /app
+ARG TARGETARCH
+
+COPY ./build/mailApp-${TARGETARCH} /app/mailApp
 COPY ./templates /templates
 
 CMD [ "/app/mailApp" ]

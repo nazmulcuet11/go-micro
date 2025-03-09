@@ -2,6 +2,8 @@ FROM alpine:latest
 
 RUN mkdir app
 
-COPY ./build/authApp /app
+ARG TARGETARCH
+
+COPY ./build/authApp-${TARGETARCH} /app/authApp
 
 CMD [ "/app/authApp" ]
