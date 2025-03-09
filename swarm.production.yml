@@ -1,0 +1,106 @@
+version: '3'
+
+services:
+  caddy:
+    image: nazmulcuet11/go-micro-caddy-production:2.0.0
+    ports:
+      - "80:80"
+      - "443:443"
+    deploy:
+      mode: replicated
+      replicas: 1
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+  front-end: 
+    image: nazmulcuet11/go-micro-front-end:2.0.0
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      BROKER_URL: "http://backend"
+  
+  broker-service: 
+    image: nazmulcuet11/go-micro-broker-service:2.0.0
+    deploy:
+      mode: replicated
+      replicas: 1
+  
+  listner-service:
+    image: nazmulcuet11/go-micro-listener-service:2.0.0
+    deploy:
+      mode: replicated
+      replicas: 1
+  
+  authentication-service:
+    image: nazmulcuet11/go-micro-auth-service:2.0.1
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
+        
+  logger-service:
+    image: nazmulcuet11/go-micro-logger-service:2.0.0
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  mail-service:
+    image: nazmulcuet11/go-micro-mail-service:2.0.0
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      MAIL_DOMAIN: localhost
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+      MAIL_USERNAME: ""
+      MAIL_PASSWORD: ""
+      MAIL_ENCRYPTION: none
+      MAIL_FROM_NAME: "Example.com"
+      MAIL_FROM_ADDRESS: "mail@example.com"
+  
+  rabbitmq:
+    image: 'rabbitmq:3.9-alpine'
+    deploy:
+      mode: global
+  
+  mailhog:
+    image: 'axllent/mailpit:latest'
+    ports:
+      - "8025:8025"
+    deploy:
+      mode: global
+  
+  mongo:
+    image: 'mongo:4.2.16-bionic'
+    ports:
+      - "27017:27017"
+    deploy:
+      mode: global
+    environment:
+      MONGO_INITDB_DATABASE: logs
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./db-data/mongo/:/data/db
+  
+  postgres:
+    image: 'postgres:14.2'
+    ports:
+      - "5432:5432"
+    deploy:
+      mode: global
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: users
+    volumes:
+      - ./db-data/postgres/:/var/lib/postgresql/data/
+
+volumes:
+  caddy_data:
+    external: true
+  caddy_config:
