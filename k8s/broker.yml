@@ -31,7 +31,6 @@ kind: Service
 metadata:
   name: broker-service
 spec:
-  type: LoadBalancer
   selector:
     app: broker-service
   ports:

@@ -24,7 +24,7 @@ spec:
               cpu: "500m"
           env:
             - name: "BROKER_URL"
-              value: "http://localhost:8080"
+              value: "http://broker-service.info"
           ports:
             - containerPort: 8081
 
@@ -34,11 +34,10 @@ kind: Service
 metadata:
   name: front-end
 spec:
-  type: LoadBalancer
   selector:
     app: front-end
   ports:
     - protocol: TCP
       name: main-port
-      port: 80
+      port: 8081
       targetPort: 8081
