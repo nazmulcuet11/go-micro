@@ -4,7 +4,7 @@ metadata:
   name: my-ingress
 spec:
   rules:
-    - host: front-end.info
+    - host: myapp.com
       http:
         paths:
           - path: /
@@ -14,7 +14,7 @@ spec:
                 name: front-end
                 port:
                   number: 8081
-    - host: broker-service.info
+    - host: backend.myapp.com
       http:
         paths:
           - path: /
@@ -24,3 +24,13 @@ spec:
                 name: broker-service
                 port:
                   number: 8080
+    - host: mailpit.myapp.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mailhog
+                port:
+                  number: 8025

@@ -32,7 +32,6 @@ kind: Service
 metadata:
   name: mailhog
 spec:
-  type: LoadBalancer
   selector:
     app: mailhog
   ports:
