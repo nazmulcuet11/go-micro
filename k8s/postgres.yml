@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mongo
+  name: postgres
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongo
+      app: postgres
   template:
     metadata:
       labels:
-        app: mongo
+        app: postgres
     spec:
       containers:
-        - name: mongo
-          image: "mongo:4.2.16-bionic"
+        - name: postgres
+          image: "postgres:14.2"
           resources:
             requests:
               memory: "64Mi"
@@ -23,36 +23,35 @@ spec:
               memory: "128Mi"
               cpu: "500m"
           env:
-            - name: MONGO_INITDB_DATABASE
-              value: "logs"
-            - name: MONGO_INITDB_ROOT_USERNAME
-              value: "admin"
-            - name: MONGO_INITDB_ROOT_PASSWORD
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
               value: "password"
+            - name: POSTGRES_DB
+              value: "users"
           ports:
-            - containerPort: 27017
+            - containerPort: 5432
           volumeMounts:
-            - name: mongo-volume
-              mountPath: /data/db
+            - name: postgres-volume
+              mountPath: /var/lib/postgresql/data
   volumeClaimTemplates:
     - metadata:
-        name: mongo-volume
+        name: postgres-volume
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
             storage: 1Gi
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo
+  name: postgres
 spec:
   selector:
-    app: mongo
+    app: postgres
   ports:
     - protocol: TCP
       name: main-port
-      port: 27017
-      targetPort: 27017
+      port: 5432
+      targetPort: 5432
